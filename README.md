@@ -22,7 +22,7 @@ is something to start with. The process to build `ccfinderx` is:
     $ ./configure
     $ make
 
-If you want to install CCFinderX in your system, may be a good idea to tell
+If you want to install CCFinderX in your system, it may be a good idea to tell
 Python about easytorq.so. This is not needed for running it from the build
 directory. For Fedora19:
 
