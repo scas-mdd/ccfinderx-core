@@ -32,6 +32,7 @@ For testing:
 For help:
 
     $ ./ccfx/ccfx -h
+    $ ./ccfx/ccfx d -h
     $ ./ccfx/ccfx p -h
     $ ./ccfx/ccfx m -h
 
