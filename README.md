@@ -12,10 +12,7 @@ yet, but you can compile ccfinderx-core without OpenJDK dependencies.
 The autoconf setting is not finished (it does not pass `make distcheck`), but it
 is something to start with. The process to build `ccfinderx` is:
 
-    $ libtoolize
-    $ aclocal -I m4 --install
-    $ autoconf
-    $ automake --foreign --add-missing
+    $ ./autoconf_init.sh
     $ ./configure
     $ make
 
