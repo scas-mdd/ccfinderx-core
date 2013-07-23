@@ -2,8 +2,7 @@ CCFinderX core
 ==============
 
 This is a clone of [CCFinderX][1] that has the settings to build with autoconf
-on a Linux machine. Actually this is a clone of a clone. I've cloned this from
-[gpoo/ccfinderx][2].
+on a Linux machine. Actually this is a clone of a clone from [gpoo/ccfinderx][2].
 
 I've split [gpoo/ccfinderx][2] into two separate projects. This is the core and
 do not need java, and there is the [ccfinderx-gui][3]. The gui is not working
