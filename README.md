@@ -27,7 +27,7 @@ where it was compiled. For Fedora19:
 
 For testing:
 
-    $ ./ccfx/ccfx d cpp <dir/with/c/or/cpp/files/*> # Detect clones
+    $ ./ccfx/ccfx d cpp <dir/with/c/or/cpp/files/*.c> # Detect clones
 
     $ ./ccfx/ccfx p a.ccfxd # Pretty? print the results
 
