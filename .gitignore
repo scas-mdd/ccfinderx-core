@@ -4,7 +4,6 @@
 *.la
 *.lo
 *.o
-*.class
 .deps
 .dirstamp
 autom4te.cache
@@ -22,5 +21,4 @@ depcomp
 missing
 .libs/
 Makefile
-!GemX/Makefile
 Makefile.in
