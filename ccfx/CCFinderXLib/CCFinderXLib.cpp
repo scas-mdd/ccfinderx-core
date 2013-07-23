@@ -29,7 +29,7 @@
 #include "../../common/argvbuilder.h"
 #include "../../common/unportable.h"
 #include "../../common/utf8support.h"
-#include "../../GemX/ccfinderx_CCFinderX.h"
+//#include "../../GemX/ccfinderx_CCFinderX.h"
 #include "../../common/base64encoder.h"
 #include "../ccfxcommon.h"
 #include "../ccfxconstants.h"
@@ -114,7 +114,7 @@ std::string getPathWithoutSpace(const std::string &dir)
 	return SYS2INNER(str);
 }
 #endif
-
+/*
 JNIEXPORT void JNICALL Java_ccfinderx_CCFinderX_setModuleDirectory
   (JNIEnv *env, jobject, jstring strDir)
 {
@@ -192,7 +192,7 @@ JNIEXPORT jintArray JNICALL Java_ccfinderx_CCFinderX_getVersion
 
 	return ary;
 }
-
+*/
 void openUrl(const std::string &url)
 {
 #if defined OS_WIN32
@@ -201,7 +201,7 @@ void openUrl(const std::string &url)
 	::system(("firefox " + url).c_str());
 #endif
 }
-
+/*
 JNIEXPORT void JNICALL Java_ccfinderx_CCFinderX_openOfficialSiteTop
   (JNIEnv *env, jobject, jstring pageSuffix)
 {
@@ -249,7 +249,7 @@ JNIEXPORT void JNICALL Java_ccfinderx_CCFinderX_openOfficialSiteDocumentPage
 	env->ReleaseStringUTFChars(pageFileName, utf8PageFileName); 
 	env->ReleaseStringUTFChars(pageSuffix, utf8PageSuffix); 
 }
-
+*/
 
 int exec_ccfx(const std:: vector<std:: string> &argsUtf8)
 {
@@ -307,7 +307,7 @@ int exec_ccfx(const std:: vector<std:: string> &argsUtf8)
 
 	return r;
 }
-
+/*
 JNIEXPORT jbyteArray JNICALL Java_ccfinderx_CCFinderX_openPrepFile
   (JNIEnv *env, jobject, jstring fileName0, jstring postfix0)
 {
@@ -436,7 +436,7 @@ JNIEXPORT jboolean JNICALL Java_ccfinderx_CCFinderX_isProcessAlive
 {
     return process_is_alive(processId);
 }
-
+*/
 #if defined __GNUC__
 boost::optional<std::vector<std::string> > read_lines(const std::string &fileName)
 {
