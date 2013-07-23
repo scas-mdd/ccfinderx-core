@@ -9,6 +9,13 @@ I've split [gpoo/ccfinderx][2] into two separate projects. This is the core and
 do not need java, and there is the [ccfinderx-gui][3]. The gui is not working
 yet, but you can compile ccfinderx-core without OpenJDK dependencies.
 
+Known build dependencies(Debian/Ubuntu):
+
+    python-dev
+    libboost-dev
+    libboost-thread-dev
+    libicu-dev
+
 The autoconf setting is not finished (it does not pass `make distcheck`), but it
 is something to start with. The process to build `ccfinderx` is:
 
