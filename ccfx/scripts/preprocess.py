@@ -18,7 +18,11 @@ import platform
 import json
 
 import pp.preprocessor as pp
+
+# This is a hack, but allows you to run CCFinderX without installing anything on your system
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../../torq/pyeasytorq/.libs')
 import easytorq
+
 import utility
 import threadingutil
 import moduleloadutility
