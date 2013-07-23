@@ -24,7 +24,7 @@ For testing:
 
     $ ./ccfx/ccfx d cpp <dir/with/c/or/cpp/files/*> # Detect clones
 
-    $ ./ccfx/ccfx p a.ccfxd <dir/with/c/or/cpp/files/*> # Pretty? print the results
+    $ ./ccfx/ccfx p a.ccfxd # Pretty? print the results
 
     $ ./ccfx/ccfx m a.ccfxd -c # Calculates clone metrics
     $ ./ccfx/ccfx m a.ccfxd -f # Calculates file metrics
