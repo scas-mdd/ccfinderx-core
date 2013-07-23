@@ -17,6 +17,7 @@ The autoconf setting is not finished (it does not pass `make distcheck`), but it
     $ make
 
 Before running you need to tell Python about easytorq.so. For Fedora19:
+
     $ sudo cp ./torq/pyeasytorq/.libs/easytorq.so /usr/lib64/python2.7/site-packages/
 
 For testing:
