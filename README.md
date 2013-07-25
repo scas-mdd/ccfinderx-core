@@ -30,7 +30,8 @@ directory. For Fedora19:
 
 For testing:
 
-    $ ./ccfx/ccfx d cpp <dir/with/c/or/cpp/files/*.c> # Detect clones
+    $ ./ccfx/ccfx d cpp -d </root/dir/of/the/project/> # Detect clones recursively on the directory
+    $ ./ccfx/ccfx d cpp <dir/with/c/or/cpp/files/*.c> # Detect clones only on that level. Using only * is **not** a good idea.
 
     $ ./ccfx/ccfx p a.ccfxd # Pretty? print the results
 
