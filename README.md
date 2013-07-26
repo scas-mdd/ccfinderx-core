@@ -34,7 +34,7 @@ directory. For Fedora19:
     $ ./ccfx/ccfx d cpp </dir/with/c/files/*.c> # Detect clones only on that level. Using only * is not a good idea.
 
     $ ./ccfx/ccfx p a.ccfxd > /tmp/ccfinderx.out # Pretty? print the results
-    $ ./ccfx/scripts/post-prettyprint.pl /tmp/ccfinderx.out /tmp/ccfinderx.xml
+    $ ./ccfx/scripts/post-prettyprint.pl /tmp/ccfinderx.out /tmp/ccfinderx.xml # Convert line numbers, save to XML
 
     $ ./ccfx/ccfx m a.ccfxd -c # Calculates clone metrics
     $ ./ccfx/ccfx m a.ccfxd -f # Calculates file metrics
