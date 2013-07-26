@@ -8,7 +8,7 @@ I've split [gpoo/ccfinderx][2] into two separate projects. This is the core and
 do not need java, and there is the [ccfinderx-gui][3]. The gui is not working
 yet, but you can compile ccfinderx-core without OpenJDK dependencies.
 
-Known build dependencies(Debian/Ubuntu):
+**Known build dependencies(Debian/Ubuntu):**
 
     python-dev
     libboost-dev
@@ -16,7 +16,7 @@ Known build dependencies(Debian/Ubuntu):
     libicu-dev
 
 The autoconf setting is not finished (it does not pass `make distcheck`), but it
-is something to start with. The process to build `ccfinderx` is:
+is something to start with. **The process to build `ccfinderx` is:**
 
     $ ./autoconf_init.sh
     $ ./configure
@@ -28,7 +28,7 @@ directory. For Fedora19:
 
     $ sudo cp ./torq/pyeasytorq/.libs/easytorq.so /usr/lib64/python2.7/site-packages/
 
-For testing:
+**For testing:**
 
     $ ./ccfx/ccfx d cpp -d </root/dir/of/the/project/> # Detect clones recursively on the directory
     $ ./ccfx/ccfx d cpp </dir/with/c/files/*.c> # Detect clones only on that level. Using only * is not a good idea.
@@ -45,7 +45,7 @@ This script reads CCFinderX pretty print format, convert line numbers from
 intermediate CCFinderX token files to source code line numbers and saves the
 result in XML format.
 
-For help:
+**For help:**
 
     $ ./ccfx/ccfx -h
     $ ./ccfx/ccfx d -h
