@@ -1,10 +1,12 @@
 #!/bin/perl
 # Peter Senna Tschudin - peter.senna@gmail.com
+# ./post-prettyprint.pl /path/to/ccfinderx_pretty_output /path/to/output.xml
 # Convert ccfinderx pretty print format to match source code line numbers
 # instead of token file line numbers.
 # file,start line,endline,file,start line, end line
 
-use DBI;
+use DBI;		# perl-Class-DBI-SQLite
+use XML::Writer;	# perl-XML-Writer.noarch
 use strict;
 
 my $DB_FILE= ":memory:";
@@ -94,14 +96,44 @@ foreach (@clone_pairs){
 	'$source_files_index[$fileref2]', '$tkn_startln2', '$tkn_endln2', '$src_startln2', '$src_endln2')");
 }
 
+#XML Writer stuff
+open my $output_file, '>', $ARGV[1] or die "Unable to open file: $ARGV[1]";
+my $writer = new XML::Writer ( OUTPUT => $output_file, DATA_MODE => 'true',
+	DATA_INDENT => 2 );
 
+$writer->startTag('repository');
+my $sth = $dbh->prepare('SELECT DISTINCT cloneid FROM filerefs');
+$sth->execute();
+while ( my $cloneid = $sth->fetchrow ) {
+	$writer->startTag('clone', 'id' => "$cloneid");
+	my $sth = $dbh->prepare( "SELECT file,src_startln,src_endln FROM filerefs where
+				cloneid = '$cloneid'" );
+	$sth->execute();
+	while ((my $path, my $src_startln, my $src_endln) = $sth->fetchrow()){
+		$writer->startTag('file');
+			$writer->startTag('path');
+				$writer->characters("$path");
+			$writer->endTag();
+			$writer->startTag('startline');
+				$writer->characters("$src_startln");
+			$writer->endTag();
+			$writer->startTag('endlineline');
+				$writer->characters("$src_endln");
+			$writer->endTag();
+		$writer->endTag();
+	}
+	$writer->endTag();
+}
+$sth->finish();
+$writer->endTag();
+close $output_file;
 
 # Dump all SQLite.
-my $sth = $dbh->prepare( "SELECT * FROM filerefs" );
-$sth->execute();
-while ( my @row = $sth->fetchrow_array ) {
-	print join ("--", @row) . "\n";
-}
+#my $sth = $dbh->prepare( "SELECT * FROM filerefs" );
+#$sth->execute();
+#while ( my @row = $sth->fetchrow_array ) {
+#	print join ("--", @row) . "\n";
+#}
 
 # get_src_ln ($file,$ln_number)
 # Open $file and read line $ln_number. Get the hex number between ^ and .,
