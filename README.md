@@ -39,7 +39,8 @@ For testing:
     $ ./ccfx/ccfx m a.ccfxd -c # Calculates clone metrics
     $ ./ccfx/ccfx m a.ccfxd -f # Calculates file metrics
 
-post-prettyprint.pl:
+**post-prettyprint.pl:**
+
 This script reads CCFinderX pretty print format, convert line numbers from
 intermediate CCFinderX token files to source code line numbers and saves the
 result in XML format.
