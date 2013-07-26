@@ -33,10 +33,16 @@ For testing:
     $ ./ccfx/ccfx d cpp -d </root/dir/of/the/project/> # Detect clones recursively on the directory
     $ ./ccfx/ccfx d cpp </dir/with/c/files/*.c> # Detect clones only on that level. Using only * is not a good idea.
 
-    $ ./ccfx/ccfx p a.ccfxd # Pretty? print the results
+    $ ./ccfx/ccfx p a.ccfxd > /tmp/ccfinderx.out # Pretty? print the results
+    $ ./ccfx/scripts/post-prettyprint.pl /tmp/ccfinderx.out /tmp/ccfinderx.xml
 
     $ ./ccfx/ccfx m a.ccfxd -c # Calculates clone metrics
     $ ./ccfx/ccfx m a.ccfxd -f # Calculates file metrics
+
+post-prettyprint.pl:
+This script reads CCFinderX pretty print format, convert line numbers from
+intermediate CCFinderX token files to source code line numbers and saves the
+result in XML format.
 
 For help:
 
