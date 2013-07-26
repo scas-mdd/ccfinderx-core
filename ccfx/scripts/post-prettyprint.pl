@@ -8,6 +8,7 @@
 
 use DBI;		# perl-Class-DBI-SQLite.noarch
 use XML::Writer;	# perl-XML-Writer.noarch
+use Digest::MD5 qw(md5 md5_hex md5_base64);
 use strict;
 
 my $DB_FILE= ":memory:";
@@ -25,25 +26,25 @@ $dbh->do("DROP TABLE IF EXISTS filerefs");
 $dbh->do("CREATE TABLE filerefs(id integer primary key autoincrement, cloneid
 	integer not null, file text not null, tkn_startln integer not null,
 	tkn_endln integer not null, src_startln integer not null, src_endln
-	integer not null)");
+	integer not null, md5 text not null)");
 
 #Put the input file in a string
 open my $input_file, $ARGV[0] or die "Unable to open file: $ARGV[0]";
 my $file_string = join '', <$input_file>;
 close $input_file;
 
-# save contents of source_files { }. The entire block is saved at @source_files[0]
+#Save contents of source_files { }. The entire block is saved at @source_files[0]
 my @source_files = $file_string =~ /source_files\s*( \{ (?: [^{}]* | (?0) )* \} )/xg;
 @source_files = split /\n/, $source_files[0]; # Now one line / @array element
 
-# save contents of clone_pairs { }. The entire block is saved at @clone_pairs[0]
+#Save contents of clone_pairs { }. The entire block is saved at @clone_pairs[0]
 my @clone_pairs = $file_string =~ /clone_pairs\s*( \{ (?: [^{}]* | (?0) )* \} )/xg;
 @clone_pairs = split /\n/, $clone_pairs[0]; # Now one line / @array element
 
-# save file_postfix
+#Save file_postfix
 (my $file_postfix) = $file_string =~ /option:\s-preprocessed_file_postfix\s(\S*)/xg;
-#$file_postfix = (split(/ /, $file_postfix))[2];
 
+#Creates $source_files_index[$i] with file paths for all file ids
 my @source_files_index;
 foreach (@source_files){
 
@@ -59,10 +60,9 @@ foreach (@source_files){
 	(my $fileid, my $file) = $string =~ /(\d+)\t(\S+)\t\d+/;
 
 	$source_files_index[$fileid] = $file;
-
-#	print $fileid . "\t" .$source_files_index[$fileid] . "\n";
 }
 
+#This is the main loop. Colect all information that will be inserted in the db
 foreach (@clone_pairs){
 
 	my $string = $_;
@@ -88,13 +88,47 @@ foreach (@clone_pairs){
 	my $src_endln2 = get_src_ln($source_files_index[$fileref2] .
 		$file_postfix, $tkn_endln2);
 
-	# id, cloneid, file, tkn_startln, tkn_endln, src_startln, src_endln
-	$dbh->do("INSERT INTO filerefs VALUES(NULL, '$cloneid',
-	'$source_files_index[$fileref1]', '$tkn_startln1', '$tkn_endln1', '$src_startln1', '$src_endln1')");
+	# MD5 is only used for detecting duplicates
+	my $md51 = md5_hex("$source_files_index[$fileref1]:$tkn_startln1:$tkn_startln1");
+	my $md52 = md5_hex("$source_files_index[$fileref2]:$tkn_startln2:$tkn_startln2");
 
+	# id, cloneid, file, tkn_startln, tkn_endln, src_startln, src_endln, md5
 	$dbh->do("INSERT INTO filerefs VALUES(NULL, '$cloneid',
-	'$source_files_index[$fileref2]', '$tkn_startln2', '$tkn_endln2', '$src_startln2', '$src_endln2')");
+	'$source_files_index[$fileref1]', '$tkn_startln1', '$tkn_endln1',
+	'$src_startln1', '$src_endln1', '$md51')");
+
+	# id, cloneid, file, tkn_startln, tkn_endln, src_startln, src_endln, md5
+	$dbh->do("INSERT INTO filerefs VALUES(NULL, '$cloneid',
+	'$source_files_index[$fileref2]', '$tkn_startln2', '$tkn_endln2',
+	'$src_startln2', '$src_endln2', '$md52')");
 }
+
+#Remove duplicates
+#
+#Foreach cloneid
+#   Are there more than one file entry with same md5?
+#	Yes -> Delete the first one
+#
+my $sth = $dbh->prepare('SELECT DISTINCT cloneid FROM filerefs');
+$sth->execute();
+while ( my $cloneid = $sth->fetchrow ) {
+	my $sth = $dbh->prepare( "SELECT id,md5 FROM filerefs where cloneid =
+		'$cloneid'" );
+	$sth->execute();
+	while ((my $id, my $md5) = $sth->fetchrow()){
+			my $sth = $dbh->prepare( "SELECT COUNT(id) FROM filerefs
+				WHERE md5 = '$md5' AND cloneid = '$cloneid'");
+			$sth->execute();
+			if ($sth->fetchrow() > 1){
+				my $sth = $dbh->prepare( "DELETE FROM filerefs WHERE id = '$id'" );
+				$sth->execute();
+				$sth->finish();
+			}
+			$sth->finish();
+	}
+	$sth->finish();
+}
+$sth->finish();
 
 #XML Writer stuff
 open my $output_file, '>', $ARGV[1] or die "Unable to open file: $ARGV[1]";
