@@ -1,11 +1,12 @@
 #!/bin/perl
 # Peter Senna Tschudin - peter.senna@gmail.com
+#
 # ./post-prettyprint.pl /path/to/ccfinderx_pretty_output /path/to/output.xml
-# Convert ccfinderx pretty print format to match source code line numbers
+#
+# Convert CCFinderX pretty print format to match source code line numbers
 # instead of token file line numbers.
-# file,start line,endline,file,start line, end line
 
-use DBI;		# perl-Class-DBI-SQLite
+use DBI;		# perl-Class-DBI-SQLite.noarch
 use XML::Writer;	# perl-XML-Writer.noarch
 use strict;
 
@@ -26,7 +27,6 @@ $dbh->do("CREATE TABLE filerefs(id integer primary key autoincrement, cloneid
 	tkn_endln integer not null, src_startln integer not null, src_endln
 	integer not null)");
 
-
 #Put the input file in a string
 open my $input_file, $ARGV[0] or die "Unable to open file: $ARGV[0]";
 my $file_string = join '', <$input_file>;
@@ -41,8 +41,8 @@ my @clone_pairs = $file_string =~ /clone_pairs\s*( \{ (?: [^{}]* | (?0) )* \} )/
 @clone_pairs = split /\n/, $clone_pairs[0]; # Now one line / @array element
 
 # save file_postfix
-my $file_postfix = join("", $file_string =~ /option:\s-preprocessed_file_postfix\s\S*/xg);
-$file_postfix = (split(/ /, $file_postfix))[2];
+(my $file_postfix) = $file_string =~ /option:\s-preprocessed_file_postfix\s(\S*)/xg;
+#$file_postfix = (split(/ /, $file_postfix))[2];
 
 my @source_files_index;
 foreach (@source_files){
