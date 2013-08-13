@@ -150,6 +150,7 @@ while ( my $cloneid = $sth->fetchrow ) {
 			$sth->finish();
 	}
 	$sth->finish();
+	$count++;
 	print "$count \r";
 }
 $sth->finish();
