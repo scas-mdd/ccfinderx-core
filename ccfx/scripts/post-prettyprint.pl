@@ -21,12 +21,22 @@ my $dbh = DBI->connect(
     { RaiseError => 1 },         
 ) or die $DBI::errstr;
 
-#Create table and indexes
+#Tuning
+$dbh->do("PRAGMA synchronous = OFF");
+$dbh->do("PRAGMA journal_mode = OFF");
+$dbh->do("PRAGMA locking_mode = EXCLUSIVE");
+$dbh->do("PRAGMA temp_store = MEMORY");
+$dbh->do("PRAGMA PAGE_SIZE = 4096");
+$dbh->do("PRAGMA cache_size=2000000");
+
+#Create table
 $dbh->do("DROP TABLE IF EXISTS filerefs");
 $dbh->do("CREATE TABLE filerefs(id integer primary key autoincrement, cloneid
 	integer not null, file text not null, tkn_startln integer not null,
 	tkn_endln integer not null, src_startln integer not null, src_endln
 	integer not null, md5 text not null)");
+
+print "Reading input file...\n";
 
 #Put the input file in a string
 open my $input_file, $ARGV[0] or die "Unable to open file: $ARGV[0]";
@@ -62,8 +72,13 @@ foreach (@source_files){
 	$source_files_index[$fileid] = $file;
 }
 
+print "Populating the DB...\n";
+
 #This is the main loop. Colect all information that will be inserted in the db
+my $count = 0;
+my $number_clone_pairs = (scalar @clone_pairs) - 1;
 foreach (@clone_pairs){
+	$count++;
 
 	my $string = $_;
 
@@ -101,7 +116,10 @@ foreach (@clone_pairs){
 	$dbh->do("INSERT INTO filerefs VALUES(NULL, '$cloneid',
 	'$source_files_index[$fileref2]', '$tkn_startln2', '$tkn_endln2',
 	'$src_startln2', '$src_endln2', '$md52')");
+
+	print "$count / $number_clone_pairs\r";
 }
+print "\n";
 
 #Remove duplicates
 #
@@ -109,6 +127,11 @@ foreach (@clone_pairs){
 #   Are there more than one file entry with same md5?
 #	Yes -> Delete the first one
 #
+print "Removing duplicates...\n";
+
+$dbh->do("CREATE INDEX md5_idx on filerefs(md5)");
+$dbh->do("CREATE INDEX cloneid_idx on filerefs(cloneid)");
+my $count = 0;
 my $sth = $dbh->prepare('SELECT DISTINCT cloneid FROM filerefs');
 $sth->execute();
 while ( my $cloneid = $sth->fetchrow ) {
@@ -127,8 +150,12 @@ while ( my $cloneid = $sth->fetchrow ) {
 			$sth->finish();
 	}
 	$sth->finish();
+	print "$count \r";
 }
 $sth->finish();
+print "\n";
+
+print "Saving the XML file...\n";
 
 #XML Writer stuff
 open my $output_file, '>', $ARGV[1] or die "Unable to open file: $ARGV[1]";
