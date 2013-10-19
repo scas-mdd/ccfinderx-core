@@ -8,7 +8,7 @@ AC_PROG_CXX
 AC_PROG_LIBTOOL
 AC_CONFIG_MACRO_DIR([m4])
 
-C_CHECK_PROG([PYTHON_INCLUDES], [python2-config], [`python2-config --cflags`], [`python-config --cflags`])
+AC_CHECK_PROG([PYTHON_INCLUDES], [python2-config], [`python2-config --cflags`], [`python-config --cflags`])
 
 AC_SUBST(PYTHON_INCLUDES)
 AM_PATH_PYTHON
