@@ -13,6 +13,7 @@ yet, but you can compile ccfinderx-core without OpenJDK dependencies.
     python-dev
     libboost-dev
     libboost-thread-dev
+    libboost-system-dev
     libicu-dev
 
 The autoconf setting is not finished (it does not pass `make distcheck`), but it
