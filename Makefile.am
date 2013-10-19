@@ -18,7 +18,7 @@ common_CPPFLAGS = \
 	-DREQUIRE_RNR
 
 common_LIBADD = -licule -licutu -licuio -licuuc -liculx -licudata -licui18n \
-	-lboost_thread-mt
+	-lboost_thread -lboost_system
 
 picosel_picosel_CPPFLAGS = $(common_CPPFLAGS) -O2 -fpermissive
 
