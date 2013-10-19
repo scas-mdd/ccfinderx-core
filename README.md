@@ -10,11 +10,14 @@ yet, but you can compile ccfinderx-core without OpenJDK dependencies.
 
 **Known build dependencies(Debian/Ubuntu):**
 
-    python-dev
+    python-dev (2.x)
     libboost-dev
     libboost-thread-dev
     libboost-system-dev
     libicu-dev
+
+You could face problems if trying to compile using Python 3.x or newer. Please
+use Python 2.x.
 
 The autoconf setting is not finished (it does not pass `make distcheck`), but it
 is something to start with. **The process to build `ccfinderx` is:**
