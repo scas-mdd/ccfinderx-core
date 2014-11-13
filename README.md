@@ -1,3 +1,6 @@
+EDIT: This is a fork of petersenna/ccfinderx-core in case it is not available later in time. 
+The README is slightly changed to reflect what were my steps.
+
 CCFinderX core
 ==============
 
@@ -28,10 +31,12 @@ is something to start with. **The process to build `ccfinderx` is:**
 
 If you want to install CCFinderX in your system, it may be a good idea to tell
 Python about easytorq.so. This is not needed for running it from the build
-directory. For Fedora19:
-
-    $ sudo cp ./torq/pyeasytorq/.libs/easytorq.so /usr/lib64/python2.7/site-packages/
-
+directory. For Ubuntu12.04:
+    
+    $ sudo cp ./torq/pyeasytorq/.libs/easytorq.so /usr/lib/python2.7/dist-packages/
+    #However there is no easytorq.so in the source files. Did not do these step, as I am using CCFinderX for Repertoire, 
+    which comes with a GUI. 
+    
 **For testing:**
 
     $ ./ccfx/ccfx d cpp -d </root/dir/of/the/project/> # Detect clones recursively on the directory
